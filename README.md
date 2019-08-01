@@ -1,9 +1,7 @@
 # Wireframe Magazine : Blend Better with Python
 ## Improving Your Workflow with Custom Python Scripts for Blender 2.80
 
-|---|
-|This will later be changed to include the entire article, but for now it's a Github Markdown test zone.|
-|---|
+| This will later be changed to include the entire article, but for now it's a Github Markdown test zone. |
 
 ---
 
