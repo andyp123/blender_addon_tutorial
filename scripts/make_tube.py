@@ -24,6 +24,7 @@ def make_tube():
     bpy.ops.object.convert(target='MESH')
     # Join back to the original object
     obj_original.select_set(True)
+    bpy.context.view_layer.objects.active = obj_original
     bpy.ops.object.join()
     bpy.ops.object.mode_set(mode='EDIT')
 

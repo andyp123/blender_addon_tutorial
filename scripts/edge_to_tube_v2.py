@@ -71,6 +71,7 @@ class Mesh_OT_EdgeToTube(bpy.types.Operator):
         bpy.ops.object.select_all(action='DESELECT')
         # Set this to the active object
         obj_tube.select_set(True)
+        obj_tube.name = "Tube"
         bpy.context.view_layer.objects.active = obj_tube
         # Enter edit mode and run bevel
         if self.corner_bevel_segments > 0:
@@ -91,6 +92,7 @@ class Mesh_OT_EdgeToTube(bpy.types.Operator):
         # Join back to the original object
         if not self.separate_object:
             obj_original.select_set(True)
+            bpy.context.view_layer.objects.active = obj_original
             bpy.ops.object.join()
         bpy.ops.object.mode_set(mode='EDIT')
         return {'FINISHED'}
