@@ -15,7 +15,7 @@ One of the easiest ways to get up and running with Python in Blender is to use t
 
 First off, let's open Blender 2.80 and switch to the scripting workspace by clicking on the tab labelled 'Scripting' at the top of the window. For this exercise, you will only really need the 3d view, Python console, info window and outliner, which are shown below.
 
-(IMAGE)
+![Blender Scripting Workspace](https://raw.githubusercontent.com/andyp123/blender_addon_tutorial/master/doc_images/blender_panels.png)
 
 The 3d view should contain three objects; The default cube, a camera and a light. If your scene doesn't contain these, either reset the default settings from the menu ('File > Defaults > Load Factory Settings') or just add the objects manually.
 
@@ -109,40 +109,21 @@ As you’ve been working through the examples, you might have noticed that the i
 ### Prototyping the Script
 First start a new scene so that you just have the default cube, camera and light. Select the cube and enter edit mode. Select some edges as shown below. Now follow the rest of the steps and take note of the commands that appear in the info window. The actual commands needed for each step are shown below.
 
-(IMAGE)
-Enter edit mode and select some edges
-
-(IMAGE)
-```python
-bpy.ops.mesh.separate(type='SELECTED')
-```
+![Step 1](https://raw.githubusercontent.com/andyp123/blender_addon_tutorial/master/doc_images/proto_step_1.png) | ![Step 2](https://raw.githubusercontent.com/andyp123/blender_addon_tutorial/master/doc_images/proto_step_2.png)
+--- | ---
+Enter edit mode and select some edges | bpy.ops.mesh.separate(type='SELECTED')
 
 Once a selection is made, the next step is to separate the selection to a new object, so that we can smooth it out and turn it into a curve. The next two steps below show how the edge corners can be smoothed with the bevel operator (the ‘Vertex Only’ option is key), and the object converted to a curve.
 
-(IMAGE)
-```python
-bpy.ops.mesh.select_all(action='SELECT')
-bpy.ops.mesh.bevel(offset_type='PERCENT', offset_pct=30.0, segments=4, vertex_only=True)
-```
-
-(IMAGE)
-```python
-bpy.ops.object.convert(target='CURVE')
-```
+![Step 3](https://raw.githubusercontent.com/andyp123/blender_addon_tutorial/master/doc_images/proto_step_3.png) | ![Step 4](https://raw.githubusercontent.com/andyp123/blender_addon_tutorial/master/doc_images/proto_step_4.png)
+--- | ---
+bpy.ops.mesh.select_all(action='SELECT')<br>bpy.ops.mesh.bevel(offset_type='PERCENT', offset_pct=30.0,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segments=4, vertex_only=True) | bpy.ops.object.convert(target='CURVE')
 
 Once we have a curve object, it’s trivial to turn it into a 3d tube by changing the bevel_depth and bevel_resolution parameters, as shown below. The final step is to convert the curve back into a mesh and join it to the original object.
 
-(IMAGE)
-```python
-bpy.context.object.data.bevel_depth = 0.1
-bpy.context.object.data.bevel_resolution = 2
-```
-
-(IMAGE)
-```python
-bpy.ops.object.convert(target='MESH')
-bpy.ops.object.join()
-```
+![Step 5](https://raw.githubusercontent.com/andyp123/blender_addon_tutorial/master/doc_images/proto_step_5.png) | ![Step 6](https://raw.githubusercontent.com/andyp123/blender_addon_tutorial/master/doc_images/proto_step_6.png)
+--- | ---
+bpy.context.object.data.bevel_depth = 0.1<br>bpy.context.object.data.bevel_resolution = 2 | bpy.ops.object.convert(target='MESH')<br>bpy.ops.object.join()
 
 One important thing to note is that some of the commands we need to call will only run in a specific editing context, which for this example will be either object or edit mode. If a command is called whilst in the wrong mode, Blender will report an error and the script will fail, so we will need to manually change the mode before calling the command.
 
@@ -266,14 +247,14 @@ Now copy and paste the function body of the make_tube script into the execute fu
 
 Once everything is working, save your script to a file named ‘edge_to_tube.py’. Now the script is saved, it can be installed in Blender through the Add-ons section in Blender Preferences (‘Edit > Preferences’) by clicking the ‘Install…’ button and selecting the file you saved. Once installed, you will need to enable it by checking the box to the left of the add-on name. Now you can use your new operator even if you restart blender!
 
-(IMAGE)
+![Installed Add-on](https://raw.githubusercontent.com/andyp123/blender_addon_tutorial/master/doc_images/blender-addon-installed.png)
 
 The add-on is still not finished, and we are going to continue developing it. However, having it installed can cause conflicts, so hit the ‘Remove’ button to uninstall it for the time being.
 
 ### Tweaking Tubes with Operator Properties
 Although we’ve made a working add-on that does something useful, it would be far more useful if the results were tweakable. This is where operator properties come in. Operator properties are class variables that are exposed in the redo panel that appears in the bottom left corner of the 3d view after calling an operator, and we will use them to make our tubes tweakable.
 
-(IMAGE)
+![Inset faces redo panel](https://raw.githubusercontent.com/andyp123/blender_addon_tutorial/master/doc_images/blender-redo.png)
 The redo panel for the Inset Faces operator.
 
 The first thing to do is identify which aspects of the tube we would like to be able to adjust. Tube thickness is the most obvious setting, followed by the size of the bevelled corners, and detail or smoothness of the tube. By looking at the commands used in our Mesh_OT_EdgeToTube operator’s execute function, we can see that changing all of these things can be accomplished quite easily.
@@ -332,7 +313,7 @@ The properties defined above belong to the Mesh_OT_EdgeToTube class, and can be 
 
 Now add all the properties you like to your code, hooking them up in the execute function. Try to do a couple more than just what is shown above. Now when you run the Edge to Tube operator, you should see something like the redo panel shown below. Tweak the settings and watch the resulting tube change shape!
 
-(IMAGE)
+![Pipemania!](https://raw.githubusercontent.com/andyp123/blender_addon_tutorial/master/doc_images/blender-pipemania.png)
 
 That’s it, our add-on is complete!
 
